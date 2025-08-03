@@ -1,7 +1,7 @@
 body {
-  background-color: hotpink;
-  color: white;
-  font-family: sans-serif;
-  text-align: center;
-  padding: 40px;
+    background-color: hotpink !important;
+    color: white !important;
+    font-size: 40px !important;
+    text-align: center;
+    padding-top: 50px;
 }
