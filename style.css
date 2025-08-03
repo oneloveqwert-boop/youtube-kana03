@@ -1,21 +1,24 @@
+/* 背景と本文全体のスタイル */
 body {
-  background-color: lightyellow;
+  background-color: #f0f0f0; /* 灰色背景 */
   font-family: sans-serif;
   text-align: center;
   padding: 40px;
-  background: #f0f0f0;
 }
 
+/* 見出し */
 h1 {
   color: #333;
 }
 
+/* 入力欄とボタン共通 */
 input, button {
   font-size: 16px;
   padding: 8px;
   margin: 8px;
 }
 
+/* ボタンの色 */
 button {
   background: #0070f3;
   color: white;
