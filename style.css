@@ -1,7 +1,29 @@
 body {
-    background-color: hotpink !important;
-    color: white !important;
-    font-size: 40px !important;
-    text-align: center;
-    padding-top: 50px;
+  background-color: red; /* 背景を真っ赤に */
+  color: white; /* 文字を白に */
+  font-family: sans-serif;
+  text-align: center;
+  padding: 40px;
+}
+
+h1 {
+  font-size: 40px;
+  color: yellow; /* 見出しは黄色に */
+}
+
+input, button {
+  font-size: 20px;
+  padding: 12px;
+  margin: 12px;
+}
+
+button {
+  background: black;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background: orange;
 }
