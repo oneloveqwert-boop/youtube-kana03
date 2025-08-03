@@ -1,10 +1,9 @@
 {
   "version": 2,
-  "functions": {
-    "api/subtitles.js": {
-      "runtime": "nodejs18.x"
-    }
-  },
+  "builds": [
+    { "src": "index.html", "use": "@vercel/static-build" },
+    { "src": "api/subtitles.js", "use": "@vercel/node" }
+  ],
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/$1.js" },
     { "src": "/(.*)", "dest": "/index.html" }
