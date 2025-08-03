@@ -1,9 +1,0 @@
-youtube-kana/
-├─ index.html
-├─ style.css
-├─ script.js
-├─ vercel.json
-├─ package.json        ← npm init で生成
-├─ package-lock.json   ← npm install 後に生成
-└─ api/
-   └─ subtitles.js     ← サーバレス関数
