@@ -1,27 +1,43 @@
 body {
-  background-color: lightyellow;
+  background-color: #ffefd5; /* 明るいオレンジ系 */
   font-family: sans-serif;
   text-align: center;
   padding: 40px;
 }
 
 h1 {
-  color: #333;
+  color: #b22222; /* 濃い赤 */
+  font-size: 36px;
+  margin-bottom: 20px;
 }
 
-input, button {
-  font-size: 16px;
-  padding: 8px;
-  margin: 8px;
+input {
+  font-size: 18px;
+  padding: 10px;
+  margin: 10px;
+  width: 300px;
+  border: 2px solid #b22222;
+  border-radius: 5px;
 }
 
 button {
-  background: #0070f3;
+  font-size: 18px;
+  padding: 10px 20px;
+  margin: 10px;
+  background: #32cd32; /* ライムグリーン */
   color: white;
   border: none;
+  border-radius: 5px;
   cursor: pointer;
+  transition: 0.3s;
 }
 
 button:hover {
-  background: #0051a8;
+  background: #228b22; /* 濃い緑 */
+}
+
+#player, #subtitles {
+  margin-top: 30px;
+  font-size: 20px;
+  color: #333;
 }
