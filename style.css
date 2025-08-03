@@ -1,29 +1,40 @@
+/* 柔らかく見やすいデザイン */
 body {
-  background-color: red; /* 背景を真っ赤に */
-  color: white; /* 文字を白に */
+  background-color: #fdf6e3; /* 柔らかいベージュ */
   font-family: sans-serif;
   text-align: center;
   padding: 40px;
+  margin: 0;
 }
 
 h1 {
-  font-size: 40px;
-  color: yellow; /* 見出しは黄色に */
+  color: #333;
+  margin-bottom: 20px;
 }
 
 input, button {
-  font-size: 20px;
-  padding: 12px;
-  margin: 12px;
+  font-size: 16px;
+  padding: 10px 14px;
+  margin: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
 }
 
 button {
-  background: black;
+  background: #0070f3;
   color: white;
   border: none;
   cursor: pointer;
 }
 
 button:hover {
-  background: orange;
+  background: #0051a8;
+}
+
+#subtitles {
+  margin-top: 30px;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
