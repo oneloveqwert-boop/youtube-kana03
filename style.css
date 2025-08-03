@@ -1,5 +1,5 @@
 body {
-  background-color: #fff8c6; /* 明るめ黄色系 */
+  background-color: #fff9cc; /* 明るめ黄色 */
   font-family: sans-serif;
   text-align: center;
   padding: 40px;
@@ -7,11 +7,6 @@ body {
 
 h1 {
   color: #333;
-  margin-bottom: 20px;
-}
-
-.input-area {
-  margin-bottom: 20px;
 }
 
 input, button {
@@ -32,16 +27,11 @@ button:hover {
 }
 
 #player {
-  margin: 20px auto;
-  width: 560px;
-  max-width: 100%;
+  margin-top: 20px;
 }
 
 #subtitles {
   margin-top: 20px;
   font-size: 18px;
-  background: rgba(255, 255, 255, 0.8);
-  padding: 10px;
-  display: inline-block;
-  border-radius: 8px;
+  line-height: 1.6;
 }

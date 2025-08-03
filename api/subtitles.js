@@ -1,28 +1,34 @@
 export default async function handler(req, res) {
   const { videoId } = req.query;
-  if (!videoId) return res.status(400).json({ error: "videoId is required" });
+  if (!videoId) return res.status(400).json({ error: "videoId required" });
 
-  // 本来は YouTube API を叩く。ここではデモとして固定テキスト
-  const subtitles = "This is a DEMO subtitle with Difficult WORDS like Philosophy and Psychology.";
+  // 本来はYouTube字幕APIやスクレイピングを利用
+  // ここでは試作としてサンプル変換
+  const subtitles = [
+    "Hello world",
+    "This is an example of difficult vocabulary",
+    "Ephemeral phenomenon and ubiquitous technology"
+  ];
 
-  // 簡単な英単語判定＋カタカナ化
-  const words = subtitles.split(" ").map(word => {
-    const lower = word.toLowerCase();
-    if (lower.length > 7) { // 難単語っぽいものだけ変換
-      return toKatakana(word);
-    }
-    return word;
-  });
+  // 簡易的に「6文字以上の単語」をカタカナ変換（超簡易版）
+  const kanaText = subtitles
+    .map(line =>
+      line.split(" ")
+        .map(word => word.length >= 6 ? toKatakana(word) : word)
+        .join(" ")
+    )
+    .join("\n");
 
-  res.status(200).json({ subtitles: words.join(" ") });
+  res.status(200).json({ text: kanaText });
 }
 
-// 英語 → 簡易カタカナ変換
 function toKatakana(word) {
   return word
-    .replace(/a/gi, "ア")
-    .replace(/e/gi, "エ")
-    .replace(/i/gi, "イ")
-    .replace(/o/gi, "オ")
-    .replace(/u/gi, "ウ");
+    .toLowerCase()
+    .replace(/a/g, "ア")
+    .replace(/e/g, "エ")
+    .replace(/i/g, "イ")
+    .replace(/o/g, "オ")
+    .replace(/u/g, "ウ")
+    .toUpperCase();
 }

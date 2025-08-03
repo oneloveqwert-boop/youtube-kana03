@@ -1,41 +1,24 @@
-let player;
-
-// YouTube iframe API をロード
-function loadVideo() {
-  const url = document.getElementById('youtubeUrl').value;
-  const videoId = extractVideoID(url);
+async function loadVideo() {
+  const url = document.getElementById("youtubeUrl").value;
+  const videoId = extractVideoId(url);
   if (!videoId) {
-    alert("正しい YouTube URL を入力してください");
+    alert("正しいYouTube URLを入力してください");
     return;
   }
 
-  if (!window.YT) {
-    const tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/iframe_api";
-    document.body.appendChild(tag);
-    window.onYouTubeIframeAPIReady = () => createPlayer(videoId);
-  } else {
-    createPlayer(videoId);
-  }
+  // 埋め込みプレーヤー表示
+  document.getElementById("player").innerHTML =
+    `<iframe width="560" height="315"
+      src="https://www.youtube.com/embed/${videoId}?autoplay=0&cc_load_policy=1"
+      frameborder="0" allowfullscreen></iframe>`;
 
-  fetch(`/api/subtitles?videoId=${videoId}`)
-    .then(res => res.json())
-    .then(data => {
-      document.getElementById("subtitles").textContent = data.subtitles || "字幕が取得できませんでした。";
-    });
+  // サーバレス関数から字幕取得
+  const res = await fetch(`/api/subtitles?videoId=${videoId}`);
+  const data = await res.json();
+  document.getElementById("subtitles").innerText = data.text || "字幕なし";
 }
 
-function createPlayer(videoId) {
-  if (player) player.destroy();
-  player = new YT.Player('player', {
-    height: '315',
-    width: '560',
-    videoId: videoId
-  });
-}
-
-function extractVideoID(url) {
-  const reg = /(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-  const match = url.match(reg);
+function extractVideoId(url) {
+  const match = url.match(/(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
   return match ? match[1] : null;
 }
