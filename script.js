@@ -8,44 +8,35 @@ const extractVideoId = (input) => {
   return m ? m[1] : null;
 };
 
+const state = { raw:"", html:"", showProcessed:true };
+
 const renderPlayer = (videoId) => {
   $("#player").innerHTML =
-    `<iframe src="https://www.youtube.com/embed/${videoId}?cc_load_policy=1"
-      allowfullscreen></iframe>`;
-};
-
-const state = {
-  raw: "",
-  processed: "",
-  showProcessed: true
+    `<iframe src="https://www.youtube.com/embed/${videoId}?cc_load_policy=1" allowfullscreen></iframe>`;
 };
 
 const renderSubs = () => {
-  $("#subs").textContent = state.showProcessed ? state.processed : state.raw;
+  const el = $("#subs");
+  el.innerHTML = state.showProcessed ? state.html : escapeHtml(state.raw).replace(/\n/g,"<br>");
 };
 
 $("#btnLoad").addEventListener("click", async () => {
   const input = $("#url").value.trim();
   const videoId = extractVideoId(input);
-  if (!videoId) {
-    alert("正しいURLまたは動画IDを入力してください。");
-    return;
-  }
+  if (!videoId) { alert("正しいURLまたは動画IDを入力してください"); return; }
   renderPlayer(videoId);
 
   try {
-    const r = await fetch(`/api/subtitles.js?videoId=${encodeURIComponent(videoId)}`, {
-      headers: { "x-kana-mode": "phrase-underline" } // 将来拡張用
-    });
-    if (!r.ok) throw new Error(`HTTP ${r.status}`);
-    const json = await r.json();
-    state.raw = json.raw || "";
-    state.processed = json.text || "";
+    const r = await fetch(`/api/subtitles.js?videoId=${encodeURIComponent(videoId)}&lang=en`);
+    const j = await r.json();
+    if (!r.ok) throw new Error(j.error || "取得失敗");
+    state.raw = j.raw || "";
+    state.html = j.html || "";
     state.showProcessed = true;
     renderSubs();
   } catch (e) {
     state.raw = "";
-    state.processed = `取得エラー：${String(e)}`;
+    state.html = `<span style="color:#a00">エラー: ${String(e)}</span>`;
     state.showProcessed = true;
     renderSubs();
   }
@@ -57,11 +48,13 @@ $("#btnToggleRaw").addEventListener("click", () => {
 });
 
 $("#btnCopy").addEventListener("click", async () => {
-  const text = state.showProcessed ? state.processed : state.raw;
-  try {
-    await navigator.clipboard.writeText(text);
-    alert("テキストをコピーしました。");
-  } catch {
-    alert("コピーに失敗しました。");
-  }
+  const text = state.showProcessed
+    ? (state.html.replace(/<[^>]+>/g,"")).replace(/<br\s*\/?>/gi,"\n")
+    : state.raw;
+  try { await navigator.clipboard.writeText(text); alert("コピーしました"); }
+  catch { alert("コピー失敗"); }
 });
+
+function escapeHtml(s){
+  return (s||"").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;'}[m]));
+}
