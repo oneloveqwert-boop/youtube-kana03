@@ -1,14 +1,44 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Youtube Kana</title>
-  <!-- CSS の読み込みは相対パスにする -->
-  <link rel="stylesheet" href="./style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>YouTube 難単語→カタカナ（試作完成版）</title>
+  <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
-  <h1>黄色背景＋字幕対応テスト</h1>
+  <header class="shell">
+    <h1>YouTube 難単語→カタカナ</h1>
+    <p class="subtitle">英語字幕の「難しめ単語」だけをカタカナにして表示（試作）</p>
+  </header>
+
+  <main class="shell">
+    <section class="panel">
+      <label for="url" class="label">YouTubeのURL または 動画ID</label>
+      <div class="row">
+        <input id="url" type="text" placeholder="例）https://youtu.be/dQw4w9WgXcQ  または  dQw4w9WgXcQ" />
+        <button id="btnLoad">表示＆字幕変換</button>
+      </div>
+      <small class="note">※ この試作はダミー字幕を加工して返します（本番APIは差し替え前提）。</small>
+    </section>
+
+    <section class="panel">
+      <div id="player" class="player"></div>
+    </section>
+
+    <section class="panel">
+      <div class="row row-actions">
+        <button id="btnToggleRaw">原文/加工 切替</button>
+        <button id="btnCopy">テキストをコピー</button>
+      </div>
+      <pre id="subs" class="subs">ここに字幕が表示されます</pre>
+    </section>
+  </main>
+
+  <footer class="shell footnote">
+    <p>試作完成版（静的フロント＋Vercel Functions）。</p>
+  </footer>
+
   <script src="./script.js"></script>
 </body>
 </html>

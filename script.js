@@ -1,24 +1,67 @@
-async function loadVideo() {
-  const url = document.getElementById("youtubeUrl").value;
-  const videoId = extractVideoId(url);
+const $ = (q) => document.querySelector(q);
+
+const extractVideoId = (input) => {
+  if (!input) return null;
+  const idOnly = /^[A-Za-z0-9_-]{11}$/;
+  if (idOnly.test(input.trim())) return input.trim();
+  const m = input.match(/(?:v=|youtu\.be\/|embed\/)([A-Za-z0-9_-]{11})/);
+  return m ? m[1] : null;
+};
+
+const renderPlayer = (videoId) => {
+  $("#player").innerHTML =
+    `<iframe src="https://www.youtube.com/embed/${videoId}?cc_load_policy=1"
+      allowfullscreen></iframe>`;
+};
+
+const state = {
+  raw: "",
+  processed: "",
+  showProcessed: true
+};
+
+const renderSubs = () => {
+  $("#subs").textContent = state.showProcessed ? state.processed : state.raw;
+};
+
+$("#btnLoad").addEventListener("click", async () => {
+  const input = $("#url").value.trim();
+  const videoId = extractVideoId(input);
   if (!videoId) {
-    alert("正しいYouTube URLを入力してください");
+    alert("正しいURLまたは動画IDを入力してください。");
     return;
   }
+  renderPlayer(videoId);
 
-  // 埋め込みプレーヤー表示
-  document.getElementById("player").innerHTML =
-    `<iframe width="560" height="315"
-      src="https://www.youtube.com/embed/${videoId}?autoplay=0&cc_load_policy=1"
-      frameborder="0" allowfullscreen></iframe>`;
+  try {
+    const r = await fetch(`/api/subtitles.js?videoId=${encodeURIComponent(videoId)}`, {
+      headers: { "x-kana-mode": "phrase-underline" } // 将来拡張用
+    });
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const json = await r.json();
+    state.raw = json.raw || "";
+    state.processed = json.text || "";
+    state.showProcessed = true;
+    renderSubs();
+  } catch (e) {
+    state.raw = "";
+    state.processed = `取得エラー：${String(e)}`;
+    state.showProcessed = true;
+    renderSubs();
+  }
+});
 
-  // サーバレス関数から字幕取得
-  const res = await fetch(`/api/subtitles?videoId=${videoId}`);
-  const data = await res.json();
-  document.getElementById("subtitles").innerText = data.text || "字幕なし";
-}
+$("#btnToggleRaw").addEventListener("click", () => {
+  state.showProcessed = !state.showProcessed;
+  renderSubs();
+});
 
-function extractVideoId(url) {
-  const match = url.match(/(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
-  return match ? match[1] : null;
-}
+$("#btnCopy").addEventListener("click", async () => {
+  const text = state.showProcessed ? state.processed : state.raw;
+  try {
+    await navigator.clipboard.writeText(text);
+    alert("テキストをコピーしました。");
+  } catch {
+    alert("コピーに失敗しました。");
+  }
+});
